@@ -34,7 +34,6 @@ class ChatLogActivity : AppCompatActivity() {
 
     var selectedPhotoUri: Uri? = null
 
-
     val adapter = GroupAdapter<ViewHolder>()
     var toUser: User? = null
 
@@ -76,7 +75,6 @@ class ChatLogActivity : AppCompatActivity() {
         val fromId = FirebaseAuth.getInstance().uid
         val toId = toUser?.uid
         val ref = FirebaseDatabase.getInstance().getReference("/user-messages/$fromId/$toId")
-
         ref.addChildEventListener(object : ChildEventListener {
 
             override fun onChildAdded(p0: DataSnapshot, p1: String?) {
