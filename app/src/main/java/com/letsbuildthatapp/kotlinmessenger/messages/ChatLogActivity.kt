@@ -56,9 +56,9 @@ class ChatLogActivity : AppCompatActivity() {
             Log.d(TAG, "Attempt to send message....")
 
             // nó bị ở đây này do logic mjk sai
-            if (edittext_chat_log.text.toString() == "") imageStoreMedia.setImageResource(R.drawable.ic_baseline_image_24) else performSendMessage(selectedPhotoUri.toString())
+            if (edittext_chat_log.text.toString() == "") uploadImageToFirebaseStorage() else performSendMessage(selectedPhotoUri.toString())
 
-            uploadImageToFirebaseStorage()
+
         }
 
 
@@ -89,13 +89,13 @@ class ChatLogActivity : AppCompatActivity() {
                         val currentUser = LatestMessagesActivity.currentUser ?: return
                         adapter.add(ChatFromItem(this@ChatLogActivity, chatMessage.text, currentUser, chatMessage.image))
                     } else {
-                        adapter.add(ChatToItem(chatMessage.text, toUser!!))
+                        adapter.add(ChatToItem(this@ChatLogActivity,chatMessage.text, toUser!!, chatMessage.image))
                     }
                 }
 
                 if (imageMess != null) {
                     Log.d(TAG, imageMess.image)
-//                    if ()
+
                 }
 
                 recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)

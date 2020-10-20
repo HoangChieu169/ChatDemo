@@ -56,35 +56,34 @@ class ChatFromItem(val activity: Activity, val text: String, val user: User, val
     override fun getLayout(): Int {
         return if (text != "") R.layout.chat_from_row else R.layout.chat_from_image_row
     }
-
-    private fun showDialog() {
-        val dialog = Dialog(activity)
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog.setCancelable(false)
-        dialog.setContentView(R.layout.dialog_show_image_mess)
-        val close = dialog.findViewById<ImageView>(R.id.imageViewCloseImage)
-        val image = dialog.findViewById<ImageView>(R.id.imageViewShowImageMess)
-        if (selectedPhotoUri != null) Picasso.get().load(selectedPhotoUri).into(image) else image.setImageResource(R.drawable.ic_baseline_image_24)
-
-        close.setOnClickListener {
-            dialog.dismiss()
-        }
-        dialog.show()
-
-    }
 }
 
-class ChatToItem(val text: String, val user: User) : Item<ViewHolder>() {
+class ChatToItem(val activity: Activity, val text: String, val user: User, val selectedPhotoUri: String) : Item<ViewHolder>() {
     override fun bind(viewHolder: ViewHolder, position: Int) {
+        if (text != "") {
+            viewHolder.itemView.textview_to_row.text = text
+            val uri = user.profileImageUrl
+            val targetImageView = viewHolder.itemView.imageview_chat_to_row_avater
+            Picasso.get().load(uri).into(targetImageView)
 
-        viewHolder.itemView.textview_to_row.text = text
-        val uri = user.profileImageUrl
-        val targetImageView = viewHolder.itemView.imageview_chat_to_row
-        Picasso.get().load(uri).into(targetImageView)
+        } else {
+            val uri = user.profileImageUrl
+            val imageAvaterChatToItemRow = viewHolder.itemView.image_chat_tu_phia_ban_minh
+            Picasso.get().load(uri).into(imageAvaterChatToItemRow)
+            val imageChatToRow = viewHolder.itemView.image_show_detail_mess
+            Picasso.get().load(selectedPhotoUri).into(imageChatToRow)
+            viewHolder.itemView.image_show_detail_mess.setOnClickListener {
+                val intent = Intent(activity, ShowDetailImageMessActivity::class.java).apply {
+                    putExtra("SHOW DETAIL IMAGE", selectedPhotoUri)
+                }
+                activity.startActivity(intent);
+            }
+        }
         // load our user image into the star
     }
 
     override fun getLayout(): Int {
-        return R.layout.chat_to_row
+        return if (text != "") R.layout.chat_to_row
+        else R.layout.chat_to_image_row
     }
 }
