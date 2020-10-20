@@ -137,6 +137,7 @@ class ChatLogActivity : AppCompatActivity() {
             val bitmap = MediaStore.Images.Media.getBitmap(contentResolver, selectedPhotoUri)
             imageStoreMedia.setImageBitmap(bitmap)
 
+
         }
 
     }
@@ -187,6 +188,9 @@ class ChatLogActivity : AppCompatActivity() {
                 .addOnSuccessListener {
                     Log.d(TAG, "Saved our chat message: ${reference.key}")
                     edittext_chat_log.text.clear()
+                    if (profileImageUrl != null) {
+                        imageStoreMedia.setImageResource(R.drawable.ic_baseline_image_24)
+                    }
                     recyclerview_chat_log.scrollToPosition(adapter.itemCount - 1)
                 }
 
