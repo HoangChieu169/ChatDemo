@@ -20,9 +20,15 @@ import com.letsbuildthatapp.kotlinmessenger.models.User
 import com.letsbuildthatapp.kotlinmessenger.registerlogin.RegisterActivity
 import com.letsbuildthatapp.kotlinmessenger.views.ChatFromItem
 import com.letsbuildthatapp.kotlinmessenger.views.ChatToItem
+import com.squareup.picasso.NetworkPolicy
+import com.squareup.picasso.Picasso
 import com.xwray.groupie.GroupAdapter
 import com.xwray.groupie.ViewHolder
 import kotlinx.android.synthetic.main.activity_chat_log.*
+import kotlinx.android.synthetic.main.activity_show_detail_image_mess.*
+import kotlinx.android.synthetic.main.chat_to_image_row.*
+import kotlinx.android.synthetic.main.user_row_new_message.*
+import kotlinx.android.synthetic.main.user_row_new_message.view.*
 import java.util.*
 
 class ChatLogActivity : AppCompatActivity() {
@@ -33,13 +39,16 @@ class ChatLogActivity : AppCompatActivity() {
     }
 
     var selectedPhotoUri: Uri? = null
-
+     val database = FirebaseDatabase.getInstance()
     val adapter = GroupAdapter<ViewHolder>()
     var toUser: User? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_chat_log)
+
+        val reference = database.getReference("Post")
+        reference.keepSynced(true)
 
         recyclerview_chat_log.adapter = adapter
 
@@ -204,12 +213,16 @@ class ChatLogActivity : AppCompatActivity() {
                     ref.downloadUrl.addOnSuccessListener {
                         Log.d(RegisterActivity.TAG, "File Location: $it")
                         performSendMessage(it.toString())
+
 //                        saveUserToFirebaseDatabase(it.toString())
                     }
                 }
                 .addOnFailureListener {
                     Log.d(RegisterActivity.TAG, "Failed to upload image to storage: ${it.message}")
                 }
+//        val intentImageMess = intent.getStringExtra("SHOW DETAIL IMAGE")
+//        Picasso.get().load(intentImageMess).into(imageViewShowImageMess)
+//        Picasso.get().load(intentImageMess).networkPolicy(NetworkPolicy.OFFLINE).into(imageview_new_message)
     }
 
 

@@ -16,10 +16,11 @@ import kotlinx.android.synthetic.main.latest_message_row.view.*
 
 class LatestMessageRow(val chatMessage: ChatMessage): Item<ViewHolder>() {
   var chatPartnerUser: User? = null
-
+  val database = FirebaseDatabase.getInstance()
   override fun bind(viewHolder: ViewHolder, position: Int) {
     viewHolder.itemView.message_textview_latest_message.text = chatMessage.text
-
+    val reference = database.getReference("Post")
+    reference.keepSynced(true)
     val chatPartnerId: String
     if (chatMessage.fromId == FirebaseAuth.getInstance().uid) {
       chatPartnerId = chatMessage.toId
